@@ -6,7 +6,7 @@ b = 3
 print(a + b)
 print(a - b)
 print(a * b)
-print(a / b)
+print(a / b) # 무조건 플롯 타입
 print(a % b)
 print( a // b)
 print(a ** b) # 거듭제곱

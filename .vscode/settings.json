@@ -5,4 +5,7 @@
   // },
   "code-runner.saveFileBeforeRun" : true,
   "terminal.intergrated.fontSize" : 30,
+  "editor.fontFamily": "'D2Coding', Consolas, monospace"
+ 
+  
 }

@@ -117,20 +117,41 @@ print(hash((1, 2)))
 # ===========================================================
 
 d = {"kor": 90, "mat": 85, "eng": 80}
+print(len(d))
+# print(sum(d)) # 이러면 키값을 계산함. 현재 키값은 문자열이라 안됨
+print(sum(d.values()))
+print(min(d))
+print(max(d))
+print(min(d.values()))
+print(max(d.values()))
 
+print(sorted(d)) # 리스트 형태로 반환
+print(sorted(d.items())) # 리스트 형태로 반환
+print(dict(sorted(d.items()))) # 이러면 다시 딕셔너리
 
+# value 기준 정렬하기
+def key(x):
+    return x[1] # key 함수를 만들어줘야 함. key 함수의 리턴값: 정렬의 기준(value로 정렬해달라고 한거임)
+print(dict(sorted(d.items(), key=key)))
 
 # 정렬 기준 설정하기
 # lambda: 이름 없는(익명) 한 줄짜리 함수를 만듦
 # lambda 매개변수1, 매개변수2, ... : 표현식
-
-
+print(dict(sorted(d.items(), key=lambda x:x[1])))
 
 # 딕셔너리 합치기
-d2 = {"sci": 95, "prog": 100}
+# d2 = {"sci": 95, "prog": 100}
+# print(d + d2)
 
 
 # 딕셔너리 반복하기
+# print(d*2)
 
 
 # 멤버십 연산자
+print("kor" in d)
+print("sci" in d)
+
+print(90 in d.values())
+print(70 in d.values())
+

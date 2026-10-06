@@ -34,6 +34,7 @@ from requests import api
 response = api.get(url)
 print(response.status_code)
 
+
 # re-export를 한 경우에는 세부 모듈 경로를 몰라도 됨
 
 import requests

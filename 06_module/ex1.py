@@ -47,6 +47,7 @@ print(sys.path)                     # 파이썬 라이브러리 검색 디렉토
 # 써드 파티 설치 경로: C:\Users\<user_name>\AppData\Local\Programs\Python\Python314\Lib\site-packages
 
 
+
 # ===========================================================
 # 2. 써드 파티 모듈 불러오기 (https://pypi.org/)
 #  - 패키지 목록 보기: pip list

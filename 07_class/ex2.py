@@ -225,10 +225,11 @@ class Teacher(SchoolMember):
 
 # 1️⃣ 부모 클래스 인스턴스 변수: name(이름), phone(연락처) -> 생성자 구현
 
-
 # 2️⃣ 자식 클래스 인스턴스 변수 -> 생성자 구현
 # - Student 클래스: grade(학년)
 # - Teacher 클래스: subject(과목)
+
+
 
 
 # 3️⃣ 자식 객체 생성: 생성자 호출

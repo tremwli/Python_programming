@@ -55,8 +55,8 @@ with open(os.path.join(BASE_DIR, "data", "negative.json"), encoding="utf-8") as 
 # 긍정, 부정을 번갈아 합치기
 data = []
 for good, bad in zip(positive, negative):
-    data.append((good, 1))
-    data.append((bad, 0))
+    data.append((good, 1)) # 수행 바꾸기
+    data.append((bad, 0)) # 수행 바꾸기
 
 print(data[:5])
 
@@ -97,7 +97,7 @@ model_name = "monologg/koelectra-small-v3-discriminator"        # 허깅페이�
 tokenizer = AutoTokenizer.from_pretrained(model_name)           # 토크나이저 불러오기
 model = AutoModelForSequenceClassification.from_pretrained(     # KoELECTRA 본체 + 긍정/부정 분류용 층
     model_name,
-    id2label={0: "부정", 1: "긍정"},         # 분류개수와 출력이름 지정
+    id2label={0: "부정", 1: "긍정"},         # 분류개수와 출력이름 지정 >> 수행 바꾸기
 )
 
 

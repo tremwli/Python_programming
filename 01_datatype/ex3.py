@@ -18,6 +18,7 @@ print(bool("hello"))
 print(bool(""))
 print(bool([1]))
 print(bool([]))
+print("--")
 
 # None 자료형
 a = None

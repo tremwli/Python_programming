@@ -129,3 +129,40 @@ def add_song(title, artist, lyrics):
 
     
     save_songs(title, artist, [song])
+
+
+
+def get_songs():
+    conn = None
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+
+        cur.execute(
+            """
+            SELECT title, artist, lyrics
+            FROM songs
+           
+            """
+        )
+
+        rows = cur.fetchall()
+
+        result = []
+        for row in rows:
+            song = {
+                "제목": row[0],
+                "가수": row[1],
+                "가사": row[2]
+            }
+            result.append(song)
+
+        return result
+
+    except sqlite3.Error as e:
+        print("DB 오류:", e)
+        raise
+
+    finally:
+        if conn is not None:
+            conn.close()

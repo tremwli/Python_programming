@@ -18,7 +18,7 @@ print(multiline)
 # docstring
 def func():
     # a = 1
-    """이 함수는 테스틀용입니다."""
+    "이 함수는 테스틀용입니다."
     pass
 
 

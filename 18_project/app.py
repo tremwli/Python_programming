@@ -1,6 +1,7 @@
 import streamlit as st
-from song_api import get_song, get_post
-from song_db import init_db, load_songs, save_songs, add_song
+from song_api import get_song
+from song_db import init_db, load_songs, save_songs, add_song, get_songs
+from song_ai import search
 import streamlit.components.v1 as components
 import time 
 import unicodedata
@@ -62,7 +63,21 @@ try:
                     st.info("검색 결과 없음. 띄어쓰기를 확인하거나 아래 곡 추가하기를 할 것")
 
 
+    ai_query = st.text_input("AI 검색 : 첫 실행 시 시간이 오래 걸립니다.", placeholder="예) 일어나서 춤추고 싶어지는 신나는 노래 ")
 
+    if st.button("AI로 검색하기"):
+        if ai_query.strip() == "":
+            st.info("검색어를 입력해주세요.")
+        else:
+            all_songs = get_songs()
+
+            if not all_songs:
+                st.info("DB에 저장된 곡이 없습니다.")
+            else:
+                with st.spinner("DB에서 찾는 중..."):
+                    st.session_state.song = search(ai_query.strip(), all_songs)
+                for i in st.session_state.song:
+                    st.write(i["제목"], i["점수"])
     st.divider()
             
     if st.session_state.song:
@@ -177,20 +192,7 @@ try:
                 st.info("제목, 가수, 가사를 모두 입력해주세요.")
 
     # 여기부터 수행
-    st.title("d")
-    COLUMNS = ["글", "번호", "제목", "유저"]
-    
-    
-    title = st.text_input("제목")
-    limit = st.number_input("이거필수인가")
-    if title and limit:
-        if st.button("게시글 조회"):
-            posts = get_post(title, limit)
-    
-        if posts:        
-            st.divider()
-            df = pd.DataFrame(posts)
-            st.dataframe(df, hide_index=True)        
+       
     
 
 except Exception as e:

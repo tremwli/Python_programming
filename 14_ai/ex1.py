@@ -52,14 +52,16 @@ classifier = pipeline(
     token=token
 )
 
-sentences = [
-    "I love this movie. It was fantastic!",
-    "The food was cold and the service was terrible.",
-]
+# sentences = [
+#     "I love this movie. It was fantastic!",
+#     "The food was cold and the service was terrible.",
+#     "It was fun though little scary",
+# ]
 
-for sentence in sentences:
-    result = classifier(sentence)[0]
-    print(f"{result['label']} ({result['score']:.2f}) : {sentence}")
+# for sentence in sentences:
+#     result = classifier(sentence)[0]
+#     print(result)
+#     print(f"{result['label']} ({result['score']:.2f}) : {sentence}")
 
 
 # print()
@@ -71,26 +73,26 @@ for sentence in sentences:
 #     token=token
 # )
 
-# result = unmasker("Python is a popular [MASK] language.")
+# result = unmasker("Python is a populer [MASK] language.")
 
 # for item in result:
 #     print(f"{item['token_str']} ({item['score']:.2f}) : {item['sequence']}")
 
 
-# print()
-# print("3. 파이프라인 : 텍스트 생성")
+print()
+print("3. 파이프라인 : 텍스트 생성")
 
-# pipe = pipeline(
-#     "text-generation", 
-#     model="Qwen/Qwen2.5-0.5B-Instruct",
-#     token=token
-# )
+pipe = pipeline(
+    "text-generation", 
+    model="Qwen/Qwen2.5-0.5B-Instruct",
+    token=token
+)
 
 
-# # [role 지정]
-# # - system : 모델의 성격, 말투, 규칙을 정하는 지시문 (맨 앞에 한번만 넣음)
-# # - user : 모델에게 하는 질문이나 요청
-# # - assistant : 모델이 한 답변
+# [role 지정]
+# - system : 모델의 성격, 말투, 규칙을 정하는 지시문 (맨 앞에 한번만 넣음)
+# - user : 모델에게 하는 질문이나 요청
+# - assistant : 모델이 한 답변
 
 # messages = [
 #     {"role": "system", "content": "너는 친절한 파이썬 선생님이야. 짧은 한 문장으로 답해줘."},
@@ -116,23 +118,23 @@ for sentence in sentences:
 # print(result[0]["generated_text"][-1]["content"])   # 마지막 메시지 = 모델의 답변
 
 
-# # 위 방식을 코드로 구현
-# # - 질문할 때마다 user 메시지를 목록에 추가하고, 모델의 답변도 assistant 로 목록에 추가
-# # - 다음 질문 때 지금까지의 대화 전체가 모델에 전달되어 앞 내용을 기억하는 것처럼 동작
+# 위 방식을 코드로 구현
+# - 질문할 때마다 user 메시지를 목록에 추가하고, 모델의 답변도 assistant 로 목록에 추가
+# - 다음 질문 때 지금까지의 대화 전체가 모델에 전달되어 앞 내용을 기억하는 것처럼 동작
 
-# chat = [
-#     {"role": "system", "content": "너는 친절한 파이썬 선생님이야. 모든 질문에 짧은 한 문장으로 답해줘."},
-# ]
+chat = [
+    {"role": "system", "content": "너는 친절한 파이썬 선생님이야. 모든 질문에 짧은 한 문장으로 답해줘."},
+]
 
-# while True:
-#     question = input("질문 : ").strip()
-#     if question.lower() == "exit":
-#         break
+while True:
+    question = input("질문 : ").strip()
+    if question.lower() == "exit":
+        break
 
-#     chat.append({"role": "user", "content": question})              # 질문 추가
+    chat.append({"role": "user", "content": question})              # 질문 추가
 
-#     result = pipe(chat, max_new_tokens=100)
-#     answer = result[0]["generated_text"][-1]["content"]             # 마지막 메시지 = 모델의 답변
+    result = pipe(chat, max_new_tokens=100)                        # result에 모델의 전 답변까지 다 들어가있음
+    answer = result[0]["generated_text"][-1]["content"]             # 마지막 메시지 = 모델의 답변
 
-#     chat.append({"role": "assistant", "content": answer})           # 답변도 추가 (다음 질문 때 함께 전달)
-#     print(f"답변 : {answer}\n")
+    chat.append({"role": "assistant", "content": answer})           # 답변도 추가 (다음 질문 때 함께 전달)
+    print(f"답변 : {answer}\n")

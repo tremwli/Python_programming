@@ -1,2 +1,2 @@
 print("충돌이일어나겟죠")
-print("일어나라충돌아")
+print('hello')

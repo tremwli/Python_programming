@@ -82,7 +82,7 @@ model_name = "monologg/koelectra-small-v3-discriminator"        # 허깅페이�
 tokenizer = AutoTokenizer.from_pretrained(model_name)           # 토크나이저 불러오기
 model = AutoModelForSequenceClassification.from_pretrained(     # KoELECTRA 본체 + 4개 분류용 층
     model_name,
-    id2label=(                                           ),     # 분류개수와 출력이름 지정
+    id2label={0: "정치", 1: "경제", 2: "문화", 3: "스포츠"},     # 분류개수와 출력이름 지정
 )
 
 
@@ -96,7 +96,7 @@ def make_dataset(data):
     texts = [text for text, label in data]                          # 기사 제목만 모음
     labels = torch.tensor([label for text, label in data])          # 정답(0~3)만 모아 텐서로 변환
 
-    inputs = (       )(texts, padding=True, return_tensors="pt")    # 문장 -> 숫자
+    inputs = tokenizer(texts, padding=True, return_tensors="pt")    # 문장 -> 숫자
     return inputs, labels
 
 
@@ -112,8 +112,8 @@ test_inputs, test_labels = make_dataset(test_data)
 # ===========================================================
 
 def predict(inputs):
-    model.(     )                                   # 평가 모드
-    with torch.(      ):                           # 학습하지 않고 예측만 하기
+    model.eval()                                    # 평가 모드
+    with torch.no_grad():                           # 학습하지 않고 예측만 하기
         logits = model(**inputs).logits             # 문장 숫자를 모델에 넣고 분류 점수(logits)만 꺼내기
     return logits.argmax(dim=1)                     # 점수가 가장 높은 범주를 선택
 
@@ -142,19 +142,19 @@ print(f"평가용 정확도 : {accuracy(test_inputs, test_labels):.0%}")
 # ===========================================================
 
 # 옵티마이저 생성 (lr = 학습률)
-optimizer = torch.optim.AdamW(model.(           ), lr=1e-4)
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
 
 print()
 print("[학습]")
 for epoch in range(1, 51):                          # 50번 반복
-    model.(     )                                   # 학습 모드
+    model.train()                                   # 학습 모드
     # 정답(labels)를 함께 넣으면 모델이 예측 점수(logits)와 함께 오차(loss)도 계산해줌
-    outputs = model(**train_inputs, labels=(         ))
+    outputs = model(**train_inputs, labels=train_labels)
     loss = outputs.loss                             # 오차 (텐서)
 
-    optimizer.(       )                             # 이전 기울기 지우기
-    loss.(      )                                   # 기울기 계산
-    optimizer.(      )                              # 값 고치기
+    optimizer.zero_grad()                           # 이전 기울기 지우기
+    loss.backward()                                 # 기울기 계산
+    optimizer.step()                                # 값 고치기
 
     print(f"epoch {epoch:2d} | loss = {loss.item():.3f}")
     # -> 반복할수록 loss 가 줄어들면 학습이 잘 되고 있는 것
@@ -187,7 +187,7 @@ tokenizer.save_pretrained(save_dir)     # 토크나이저 저장 (모델과 같�
 #  - 결과 : label(정치 / 경제 / 문화 / 스포츠) + score(확률, 0~1)
 # ===========================================================
 
-classifier = pipeline((                 ), model=save_dir)
+classifier = pipeline("text-classification", model=save_dir)
 
 sentences = [
     "여야가 새해 예산안 처리를 두고 협상을 이어갔어요",
